@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足球修仙界</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- 遊戲主容器 -->
+        <div id="gameContainer" class="game-container">
+            
+            <!-- 頁面管理 -->
+            <div id="pages">
+                
+                <!-- 首頁 -->
+                <div id="startPage" class="page active">
+                    <div class="start-screen">
+                        <div class="title-section">
+                            <h1 class="game-title">⚽ 足球修仙界 ⚽</h1>
+                            <p class="subtitle">修仙結合足球，成為傳奇球隊管理者</p>
+                        </div>
+                        <div class="slot-selector">
+                            <h2>選擇存檔槽位</h2>
+                            <div id="slotButtons" class="slot-buttons"></div>
+                        </div>
+                        <button class="btn-primary btn-large" onclick="startNewGame()">開始新遊戲</button>
+                    </div>
+                </div>
+
+                <!-- 主菜單 -->
+                <div id="mainPage" class="page">
+                    <div class="main-menu">
+                        <div class="header-bar">
+                            <div class="player-info">
+                                <span>Lv.<span id="playerLevel">1</span></span>
+                                <span>💰 <span id="goldDisplay">0</span></span>
+                                <span>💎 <span id="gemsDisplay">0</span></span>
+                            </div>
+                            <button class="btn-settings" onclick="toggleSettings()">⚙️</button>
+                        </div>
+
+                        <div class="menu-content">
+                            <div class="menu-card" onclick="goToPage('racePage')">
+                                <div class="menu-icon">🏆</div>
+                                <div class="menu-title">宗門賽事</div>
+                                <div class="menu-desc">挑戰各級聯賽</div>
+                            </div>
+
+                            <div class="menu-card" onclick="goToPage('cardPage')">
+                                <div class="menu-icon">🎴</div>
+                                <div class="menu-title">球員卡包</div>
+                                <div class="menu-desc">抽卡與查看背包</div>
+                            </div>
+
+                            <div class="menu-card" onclick="goToPage('synthPage')">
+                                <div class="menu-icon">✨</div>
+                                <div class="menu-title">合成陣法</div>
+                                <div class="menu-desc">升星與升色</div>
+                            </div>
+
+                            <div class="menu-card" onclick="goToPage('taskPage')">
+                                <div class="menu-icon">📋</div>
+                                <div class="menu-title">任務日誌</div>
+                                <div class="menu-desc">完成任務賺獎勵</div>
+                            </div>
+
+                            <div class="menu-card" onclick="goToPage('savePage')">
+                                <div class="menu-icon">💾</div>
+                                <div class="menu-title">存檔管理</div>
+                                <div class="menu-desc">保存與讀取進度</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 宗門賽事頁面 -->
+                <div id="racePage" class="page">
+                    <div class="page-header">
+                        <button class="btn-back" onclick="goToPage('mainPage')">← 返回</button>
+                        <h1>宗門賽事</h1>
+                    </div>
+                    <div class="race-content">
+                        <div class="league-list">
+                            <div class="league-section">
+                                <h2>丙級業餘修仙</h2>
+                                <div id="leagueC" class="chapter-list"></div>
+                            </div>
+                            <div class="league-section">
+                                <h2>乙級業餘修仙</h2>
+                                <div id="leagueB" class="chapter-list"></div>
+                            </div>
+                            <div class="league-section">
+                                <h2>甲級業餘修仙</h2>
+                                <div id="leagueA" class="chapter-list"></div>
+                            </div>
+                            <div class="league-section">
+                                <h2>二軍初選賽</h2>
+                                <div id="leagueSC" class="chapter-list"></div>
+                            </div>
+                            <div class="league-section">
+                                <h2>階梯賽</h2>
+                                <div id="leagueD" class="chapter-list"></div>
+                            </div>
+                            <div class="league-section">
+                                <h2>職業冠軍賽</h2>
+                                <div id="leagueP" class="chapter-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 球員卡包頁面 -->
+                <div id="cardPage" class="page">
+                    <div class="page-header">
+                        <button class="btn-back" onclick="goToPage('mainPage')">← 返回</button>
+                        <h1>球員卡包</h1>
+                    </div>
+                    <div class="card-content">
+                        <div class="draw-section">
+                            <h2>抽卡</h2>
+                            <div class="draw-buttons">
+                                <button class="btn-primary" onclick="drawCard(1, 100)">
+                                    單抽<br><small>100 靈石</small>
+                                </button>
+                                <button class="btn-primary" onclick="drawCard(10, 950)">
+                                    十連抽<br><small>950 靈石</small>
+                                </button>
+                                <button class="btn-primary" onclick="drawCard(100, 9000)">
+                                    百連抽<br><small>9000 靈石</small>
+                                </button>
+                            </div>
+                            <div id="drawResult" class="draw-result"></div>
+                        </div>
+                        <div class="inventory-section">
+                            <h2>背包</h2>
+                            <div class="filter-buttons">
+                                <button class="filter-btn active" onclick="filterCards('all')">全部</button>
+                                <button class="filter-btn" onclick="filterCards('white')">🤍 白</button>
+                                <button class="filter-btn" onclick="filterCards('green')">💚 綠</button>
+                                <button class="filter-btn" onclick="filterCards('blue')">💙 藍</button>
+                                <button class="filter-btn" onclick="filterCards('orange')">🧡 橘</button>
+                                <button class="filter-btn" onclick="filterCards('red')">❤️ 紅</button>
+                                <button class="filter-btn" onclick="filterCards('purple')">💜 紫</button>
+                                <button class="filter-btn" onclick="filterCards('yellow')">💛 黃</button>
+                            </div>
+                            <div id="cardInventory" class="card-grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 合成陣法頁面 -->
+                <div id="synthPage" class="page">
+                    <div class="page-header">
+                        <button class="btn-back" onclick="goToPage('mainPage')">← 返回</button>
+                        <h1>合成陣法</h1>
+                    </div>
+                    <div class="synth-content">
+                        <div class="team-setup">
+                            <h2>隊伍配置</h2>
+                            <div class="formation-selector">
+                                <label>選擇陣型：</label>
+                                <select id="formationSelect" onchange="changeFormation()">
+                                    <option value="">選擇陣型...</option>
+                                </select>
+                            </div>
+                            <div class="team-display">
+                                <div id="formationDisplay" class="formation-visual"></div>
+                                <div id="teamSlots" class="team-slots"></div>
+                            </div>
+                            <button class="btn-primary" onclick="saveTeam()">保存隊伍</button>
+                        </div>
+
+                        <div class="synthesis-section">
+                            <h2>卡牌合成</h2>
+                            <div class="synth-buttons">
+                                <button class="btn-primary" onclick="showSynthesisWindow()">升星合成</button>
+                                <button class="btn-primary" onclick="showColorUpWindow()">升色合成</button>
+                                <button class="btn-success" onclick="autoSynthesize()">一鍵合成</button>
+                            </div>
+                            <div id="synthWindow" class="synth-window" style="display:none;">
+                                <div class="synth-modal">
+                                    <h3>卡牌合成</h3>
+                                    <div id="synthOptions" class="synth-options"></div>
+                                    <button class="btn-primary" onclick="closeSynthWindow()">關閉</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 任務日誌頁面 -->
+                <div id="taskPage" class="page">
+                    <div class="page-header">
+                        <button class="btn-back" onclick="goToPage('mainPage')">← 返回</button>
+                        <h1>任務日誌</h1>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-section">
+                            <h2>主線任務</h2>
+                            <div id="mainTasks" class="task-list"></div>
+                        </div>
+                        <div class="task-section">
+                            <h2>每日任務</h2>
+                            <div id="dailyTasks" class="task-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 存檔管理頁面 -->
+                <div id="savePage" class="page">
+                    <div class="page-header">
+                        <button class="btn-back" onclick="goToPage('mainPage')">← 返回</button>
+                        <h1>存檔管理</h1>
+                    </div>
+                    <div class="save-content">
+                        <div class="save-buttons">
+                            <button class="btn-primary" onclick="quickSave()">快速保存</button>
+                            <button class="btn-primary" onclick="exportSave()">導出存檔</button>
+                            <button class="btn-primary" onclick="importSave()">導入存檔</button>
+                            <input type="file" id="fileInput" style="display:none;" onchange="handleFileImport(event)">
+                        </div>
+                        <div id="saveSlots" class="save-slots"></div>
+                    </div>
+                </div>
+
+                <!-- 戰鬥頁面 -->
+                <div id="battlePage" class="page">
+                    <div class="battle-container">
+                        <div class="battle-header">
+                            <h2 id="battleTitle">比賽</h2>
+                            <button class="btn-back" onclick="endBattle()">× 放棄</button>
+                        </div>
+                        <div class="battle-content">
+                            <div class="team-setup-battle">
+                                <h3>選擇隊伍</h3>
+                                <div class="formation-selector">
+                                    <label>陣型：</label>
+                                    <select id="battleFormationSelect" onchange="changeBattleFormation()">
+                                        <option value="">選擇陣型...</option>
+                                    </select>
+                                </div>
+                                <div id="battleTeamSlots" class="team-slots-battle"></div>
+                                <button class="btn-primary" onclick="startBattle()">開始比賽</button>
+                            </div>
+
+                            <div id="battleReplay" class="battle-replay" style="display:none;">
+                                <div class="speed-control">
+                                    <button class="speed-btn active" onclick="setBattleSpeed(1)">1x</button>
+                                    <button class="speed-btn" onclick="setBattleSpeed(2)">2x</button>
+                                    <button class="speed-btn" onclick="setBattleSpeed(4)">4x</button>
+                                    <button class="speed-btn" onclick="sweepBattle()" id="sweepBtn" style="display:none;">掃蕩</button>
+                                </div>
+                                <div id="battleLog" class="battle-log"></div>
+                                <div id="battleResult" class="battle-result" style="display:none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 設定頁面 -->
+                <div id="settingsPage" class="page">
+                    <div class="settings-modal">
+                        <div class="settings-header">
+                            <h1>遊戲設定</h1>
+                            <button class="btn-close" onclick="toggleSettings()">×</button>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-item">
+                                <label>背景音樂</label>
+                                <input type="range" id="bgmVolume" min="0" max="100" value="70" onchange="setBGMVolume(this.value)">
+                            </div>
+                            <div class="setting-item">
+                                <label>音效</label>
+                                <input type="range" id="sfxVolume" min="0" max="100" value="70" onchange="setSFXVolume(this.value)">
+                            </div>
+                            <div class="setting-item">
+                                <button class="btn-primary" onclick="clearAllData()">清空所有遊戲資料</button>
+                            </div>
+                            <div class="setting-item">
+                                <p style="font-size: 12px; color: #999;">版本: 1.0.0 MVP</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="game-data.js"></script>
+    <script src="game-manager.js"></script>
+    <script src="battle-system.js"></script>
+    <script src="ui-manager.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
