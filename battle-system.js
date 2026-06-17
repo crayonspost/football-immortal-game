@@ -6,7 +6,7 @@ class BattleSystem {
         this.playerTeam = playerTeam;
         this.enemyTeam = enemyTeam;
         this.chapter = chapter;
-        this.battleLog = [];
+        this.battleLog = []; // 每個項目為 { time, text }
         this.playerScore = 0;
         this.enemyScore = 0;
         this.speed = 1;
@@ -84,12 +84,13 @@ class BattleSystem {
                 eventIndex++;
             }
 
-            // 顯示日誌
+            // 顯示日誌（取最新一筆物件）
             if (this.battleLog.length > 0) {
                 const lastEntry = this.battleLog[this.battleLog.length - 1];
+                const timeSec = (lastEntry.time / 1000).toFixed(1);
                 logContainer.innerHTML += `<div class="battle-log-entry">
-                    <span class="battle-log-time">[${(event?.time / 1000).toFixed(1)}s]</span>
-                    ${lastEntry}
+                    <span class="battle-log-time">[${timeSec}s]</span>
+                    ${lastEntry.text}
                 </div>`;
                 logContainer.scrollTop = logContainer.scrollHeight;
             }
@@ -111,7 +112,8 @@ class BattleSystem {
         };
 
         const text = eventTexts[event.type];
-        this.battleLog.push(text);
+        // 推入物件，保留時間以便顯示
+        this.battleLog.push({ time: event.time, text });
 
         // 判定進球
         if (event.type === 'shoot') {
@@ -181,14 +183,14 @@ class BattleSystem {
     }
 }
 
-// 設置戰鬥速度
-function setBattleSpeed(speed) {
+// 設置戰鬥速度（接受按鈕參數，避免依賴全域 event）
+function setBattleSpeed(speed, btn) {
     if (window.currentBattle) {
         window.currentBattle.speed = speed;
     }
 
-    document.querySelectorAll('.speed-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
 }
 
 // 掃蕩
